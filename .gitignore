@@ -1,0 +1,28 @@
+# dependencies
+node_modules
+
+# logs
+npm-debug.log
+
+# ENV
+.env*
+
+#Yarn log
+yarn-error.log
+
+#MAC
+.DS_Store
+
+#Idea
+/package-lock.json
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/debetgw.iml
+debetgw.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/codeStyles/Project.xml
+/.idea/vcs.xml
+
+/cache
+data/*
+data/topWinSlot.json
