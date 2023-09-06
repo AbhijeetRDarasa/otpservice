@@ -1,42 +1,44 @@
-const document_expiry = process.env.DOCUMENT_EXPIRY;
-
 const mongoose = require("mongoose");
+const moment = require("moment");
 
-const OTPSchema = new mongoose.Schema({
-  telegramId: {
-    type: String,
-    required: true,
-  },
-  otp: {
-    type: String,
-    expires: "0", // The document will be automatically deleted after 1 min / whenever the next cycle of the mongo schedular
-    //is run from minutes of its creation time
-    default: Date.now,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-    expires: 0,
-  },
-});
+let expiryTimeLocal = "";
 
-const OTP = mongoose.model("OTP", OTPSchema);
-
-OTPSchema.pre("save", async function (next) {
-  const document = this;
-  console.log("New document saved to database");
-  if (document_expiry) {
-    console.log(document_expiry);
-    document.otp.expires = 0;
-    document.createdAt.expires = document_expiry;
+function getSchema(expiryTime) {
+  console.log(expiryTime);
+  let currentDate = new Date();
+  if (expiryTime) {
+    currentDate.setMinutes(currentDate.getMinutes() + expiryTime);
+  } else {
+    currentDate.setMinutes(currentDate.getMinutes() + 1); // else set default to one minute
   }
-  setCustomExpiry();
-  next();
-});
-
-async function setCustomExpiry() {
-  if (document_expiry)
-    OTPSchema.path("otp").index({ expires: document_expiry });
-  else OTPSchema.path("otp").index({ expires: "1m" });
+  const OTPSchema = new mongoose.Schema({
+    telegramId: {
+      type: String,
+      required: true,
+    },
+    otp: {
+      type: String,
+      default: currentDate,
+      expires: expiryTime, // The document will be automatically deleted after 1 min / whenever the next cycle of the mongo schedular
+      //is run from minutes of its creation time
+    },
+    createdAt: {
+      type: Date,
+      expires: expiryTime,
+      default: currentDate,
+    },
+  });
+  return OTPSchema;
 }
-module.exports = OTP;
+
+function getModel(expiryTime) {
+  const OTPSchema = getSchema(expiryTime);
+  const OTP = mongoose.model("OTP", OTPSchema);
+  return OTP;
+}
+
+function setexpiryTime(expiryTime) {
+  expiryTimeLocal = expiryTime;
+}
+
+module.exports = { getSchema, setexpiryTime, getModel };

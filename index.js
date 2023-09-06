@@ -23,8 +23,9 @@ bot.onText(/start/, async function (msg) {
   console.log("on start ....");
   var chatId = msg.chat.id;
   console.log("chatid ", chatId);
-  const data = await sendotp(chatId);
-  bot.sendMessage(chatId, "your otp is :" + data.otp + " kindly  verify ");
+  const data = await sendotp(chatId, null);
+  console.log("/start", data);
+  bot.sendMessage(chatId, "your otp is :" + data + " kindly  verify ");
 });
 
 app.listen(process.env.APP_PORT, async () => {
