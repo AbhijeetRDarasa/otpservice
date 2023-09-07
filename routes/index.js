@@ -11,15 +11,15 @@ exports.routes = (app, bot) => {
       res.send({
         code: 200,
         status: "OK",
-        data: {
-          telegramId:data.telegramId,
-          otp:data.otp
-        },
+        data: data,
       });
-      bot.sendMessage(
-        chatId,
-        "your otp is : " + data.otp + " is successfully verified ..."
-      );
+      
+        bot.sendMessage(
+          chatId,
+          "your otp is : " + otp + data.message
+          
+        );
+
     } else {
       res.status(200);
       res.send({

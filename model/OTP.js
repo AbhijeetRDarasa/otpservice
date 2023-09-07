@@ -1,7 +1,4 @@
 const mongoose = require("mongoose");
-const moment = require("moment");
-
-let expiryTimeLocal = "";
 
 function getSchema(expiryTime) {
   console.log(expiryTime);
@@ -19,14 +16,17 @@ function getSchema(expiryTime) {
     otp: {
       type: String,
       default: currentDate,
-      expires: expiryTime, // The document will be automatically deleted after 1 min / whenever the next cycle of the mongo schedular
+      expires: 0, // The document will be automatically deleted after 1 min / whenever the next cycle of the mongo schedular
       //is run from minutes of its creation time
     },
     createdAt: {
       type: Date,
-      expires: expiryTime,
+      expires: 0,
       default: currentDate,
     },
+    isverified:{
+      type: Boolean,
+    }
   });
   return OTPSchema;
 }
