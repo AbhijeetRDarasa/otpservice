@@ -1,13 +1,11 @@
+const { generateOTP } = require("../helper/otpGenerator");
 const { getSchema } = require("../model/OTP");
 
 const mongoose = require("mongoose");
 
 exports.sendotp = async (telegramId, expiryTime) => {
   try {
-    //console.log("in the sendOTP");
-    //var otp = generateOTP();
     const data = await setTTL(expiryTime, telegramId);
-    //console.log("in the sendOTP");
     return data.otp;
   } catch (error) {
     console.log(error.message);
@@ -25,7 +23,6 @@ exports.verify = async (otp) => {
     const createdDate = findOne.createdAt;
     const value = { isverified: true, createdAt: createdDate };
 
-    //console.log("find one ",findOne)
     if (findOne && !findOne.isverified) {
       const data = await OTP.findOneAndUpdate(query, value);
       return { otp: findOne.otp, message: " OTP verified successfully" };
@@ -40,7 +37,6 @@ exports.verify = async (otp) => {
 
 setTTL = async (expiryTime, telegramId) => {
   try {
-    //console.log("in SETTTL ..")
     const otp = generateOTP();
     const data = await saveData(telegramId, otp, expiryTime);
     return data;
@@ -50,17 +46,10 @@ setTTL = async (expiryTime, telegramId) => {
   }
 };
 
-generateOTP = () => {
-  return Math.floor(100000 + Math.random() * 900000);
-};
-
 async function saveData(telegramId, otp, expiryTime) {
-  //console.log("saveData", telegramId, otp);
   const Schema = getSchema(expiryTime);
-  //console.log("after", telegramId, otp);
   let schemaTime = "";
   if (Schema) {
-    //console.log("schema .....",Schema.obj.createdAt.default);
     schemaTime = Schema.obj.createdAt.default;
   }
   const OTP = mongoose.models.OTP || mongoose.model("OTP", Schema);
@@ -72,9 +61,6 @@ async function saveData(telegramId, otp, expiryTime) {
     createdAt: schemaTime,
   });
 
-  //console.log("save", telegramId, otp);
   const data = await otpData.save();
-  //console.log("after", data);
-  console.log("data saved sucessfully", data);
   return data;
 }

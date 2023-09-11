@@ -3,11 +3,13 @@ const mongoose = require("mongoose");
 function getSchema(expiryTime) {
   console.log(expiryTime);
   let currentDate = new Date();
+  console.log("currentDate", currentDate);
   if (expiryTime) {
     currentDate.setMinutes(currentDate.getMinutes() + expiryTime);
   } else {
     currentDate.setMinutes(currentDate.getMinutes() + 1); // else set default to one minute
   }
+  console.log("currentDate", currentDate);
   const OTPSchema = new mongoose.Schema({
     telegramId: {
       type: String,
@@ -24,9 +26,9 @@ function getSchema(expiryTime) {
       expires: 0,
       default: currentDate,
     },
-    isverified:{
+    isverified: {
       type: Boolean,
-    }
+    },
   });
   return OTPSchema;
 }

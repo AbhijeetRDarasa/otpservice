@@ -1,31 +1,17 @@
 const { verify, sendotp } = require("../service/OTPService");
 
+const { success, error } = require("../helper/responseHelper");
+
 exports.routes = (app, bot) => {
   app.post("/v1/verifyotp", async (req, res) => {
     chatId = req.body.telegramId;
     otp = req.body.otp;
     const data = await verify(otp);
-    //console.log("data >>> OTP", data.otp);
     if (data) {
-      res.status(200);
-      res.send({
-        code: 200,
-        status: "OK",
-        data: data,
-      });
-      
-        bot.sendMessage(
-          chatId,
-          "your otp is : " + otp + data.message
-          
-        );
-
+      success(res, 200, "OK", data);
+      bot.sendMessage(chatId, "your otp is : " + otp + data.message);
     } else {
-      res.status(200);
-      res.send({
-        code: 400,
-        status: "Verification Failed",
-      });
+      error(res, "verification Failed", 200, 400);
       bot.sendMessage(chatId, "your OTP :" + otp + " verification failed ...");
     }
   });
@@ -36,25 +22,12 @@ exports.routes = (app, bot) => {
     if (req.body.ttlTime) {
       expiryTime = req.body.ttlTime;
     }
-    //console.log("in setTTL",expiryTime,telegramid)
     const data = await sendotp(telegramid, expiryTime);
     bot.sendMessage(telegramid, "your otp is :" + data + " kindly  verify ");
     if (data) {
-      res.status(200);
-      res.send({
-        code: 200,
-        status: "saved successfully",
-        data: {
-          otp: data,
-        },
-      });
-    }
-    else{
-      res.status(200);
-      res.send({
-        code: 503,
-        status: "Internal error",
-      });
+      success(res, 200, "OTP generated successfully", data);
+    } else {
+      error(res, "Internal Error ", 200, 503);
     }
   });
 };
