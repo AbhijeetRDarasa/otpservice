@@ -29,6 +29,9 @@ function getSchema(expiryTime) {
     isverified: {
       type: Boolean,
     },
+    emailId: {
+      type: String
+    }
   });
   return OTPSchema;
 }

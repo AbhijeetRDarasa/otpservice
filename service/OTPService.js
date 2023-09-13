@@ -3,9 +3,9 @@ const { getSchema } = require("../model/OTP");
 
 const mongoose = require("mongoose");
 
-exports.sendotp = async (telegramId, expiryTime) => {
+exports.sendotp = async (telegramId, emailId, expiryTime) => {
   try {
-    const data = await setTTL(expiryTime, telegramId);
+    const data = await setTTL(expiryTime, telegramId, emailId);
     return data.otp;
   } catch (error) {
     console.log(error.message);
@@ -35,10 +35,10 @@ exports.verify = async (otp) => {
   }
 };
 
-setTTL = async (expiryTime, telegramId) => {
+setTTL = async (expiryTime, telegramId, emailId) => {
   try {
     const otp = generateOTP();
-    const data = await saveData(telegramId, otp, expiryTime);
+    const data = await saveData(telegramId, emailId, otp, expiryTime);
     return data;
   } catch (error) {
     console.log(error.message);
@@ -46,7 +46,7 @@ setTTL = async (expiryTime, telegramId) => {
   }
 };
 
-async function saveData(telegramId, otp, expiryTime) {
+async function saveData(telegramId, emailId, otp, expiryTime) {
   const Schema = getSchema(expiryTime);
   let schemaTime = "";
   if (Schema) {
@@ -59,6 +59,7 @@ async function saveData(telegramId, otp, expiryTime) {
     otp: otp,
     isverified: false,
     createdAt: schemaTime,
+    emailId: emailId
   });
 
   const data = await otpData.save();
