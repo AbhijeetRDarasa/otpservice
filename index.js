@@ -4,8 +4,7 @@ const route = require("./routes");
 const app = express();
 const TelegramBot = require("node-telegram-bot-api");
 const { sendotp } = require("./service/OTPService");
-require('./middleware/errorHandler');
-
+require("./middleware/errorHandler");
 
 app.use(express.json());
 

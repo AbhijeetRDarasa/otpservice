@@ -1,7 +1,7 @@
 exports.success = (res, code, message, results, api) => {
-  const cde = results ? results.code : statusCode;
-  const stat = results ? results.status : "OK";
-  const dat = results ? results.data : "";
+  const cde = results ? results.code : code;
+  const stat = results ? code : "OK";
+  const dat = results ? results.otp: "";
   const msg = results.message ? results.message : message;
 
   if (!res) return;
@@ -29,7 +29,7 @@ exports.success = (res, code, message, results, api) => {
 
 exports.error = (res, message, statusCode, httpStatus, api) => {
   res.status(statusCode);
-  res.send({ status: httpStatus, code: statusCode, message: message });
+  res.send({ status: "error", code: httpStatus, message: message });
   if (message) {
     //throw Error(GCONSTANTS.API + api + GCONSTANTS.MSG + message);
   }

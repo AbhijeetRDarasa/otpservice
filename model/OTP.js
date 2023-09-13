@@ -13,7 +13,6 @@ function getSchema(expiryTime) {
   const OTPSchema = new mongoose.Schema({
     telegramId: {
       type: String,
-      required: true,
     },
     otp: {
       type: String,
@@ -30,8 +29,8 @@ function getSchema(expiryTime) {
       type: Boolean,
     },
     emailId: {
-      type: String
-    }
+      type: String,
+    },
   });
   return OTPSchema;
 }

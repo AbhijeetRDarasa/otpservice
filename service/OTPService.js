@@ -5,8 +5,8 @@ const mongoose = require("mongoose");
 
 exports.sendotp = async (telegramId, emailId, expiryTime) => {
   try {
-    const data = await setTTL(expiryTime, telegramId, emailId);
-    return data.otp;
+    const data = await setTTL(telegramId, emailId , expiryTime);
+    return data;
   } catch (error) {
     console.log(error.message);
     return { success: false, error: error.message };
@@ -35,7 +35,7 @@ exports.verify = async (otp) => {
   }
 };
 
-setTTL = async (expiryTime, telegramId, emailId) => {
+setTTL = async (telegramId, emailId, expiryTime) => {
   try {
     const otp = generateOTP();
     const data = await saveData(telegramId, emailId, otp, expiryTime);
