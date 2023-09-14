@@ -35,9 +35,8 @@ function getSchema(expiryTime) {
   return OTPSchema;
 }
 
-function getModel(expiryTime) {
-  const OTPSchema = getSchema(expiryTime);
-  const OTP = mongoose.model("OTP", OTPSchema);
+function getModel(Schema) {
+  const OTP = mongoose.models.OTP || mongoose.model("OTP", Schema);
   return OTP;
 }
 

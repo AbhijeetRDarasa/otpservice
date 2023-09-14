@@ -10,7 +10,6 @@ let smtpTransport = () =>
   });
 
 const sendEmail = (message, callback) => {
-  //console.log("sendmail", message);
   smtpTransport().sendMail(message, (err, info) => {
     if (err) {
       if (typeof callback === "function") {
@@ -22,11 +21,10 @@ const sendEmail = (message, callback) => {
   });
 };
 
-const verifyThroughEmail = (data) => {
-  //console.log("email data", data);
+const verifyEmail = (data) => {
   const message = {
     from: process.env.GMAIL_USER_NAME,
-    to: "abhi.mca50@gmail.com",
+    to: data.email,
     subject: "OTP service",
     html: data.subject,
   };
@@ -35,7 +33,7 @@ const verifyThroughEmail = (data) => {
 
 const mailService = {
   sendEmail,
-  verifyThroughEmail,
+  verifyEmail,
 };
 
 module.exports = mailService;

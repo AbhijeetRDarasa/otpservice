@@ -1,7 +1,7 @@
 exports.success = (res, code, message, results, api) => {
-  const cde = results ? results.code : code;
-  const stat = results ? code : "OK";
-  const dat = results ? results.otp: "";
+  const cde = code;
+  const stat = "OK";
+  const dat = results ? results : "";
   const msg = results.message ? results.message : message;
 
   if (!res) return;
